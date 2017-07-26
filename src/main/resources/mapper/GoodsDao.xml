@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.secondHandTradingNetwork.dao.GoodsDao">
+  
+   <select id="queryAllGoods" resultType="Goods">
+    select
+      g.goods_id,
+      g.user_id,
+      g.buyer_id,
+      g.goods_name,
+      g.goods_price,
+      g.img_address,
+      g.goods_status,
+      g.goods_desc,
+      g.create_time,
+      u.user_id "user.user_id",
+      u.user_name "user.user_name",
+      u.password "user.password"
+    from goods g
+    inner join user u on g.user_id = u.user_id
+  </select>
+  
+   <select id="queryGoodsById" resultType="Goods" parameterType="long">
+    select
+      g.goods_id,
+      g.user_id,
+      g.buyer_id,
+      g.goods_name,
+      g.goods_price,
+      g.img_address,
+      g.goods_status,
+      g.goods_desc,
+      g.create_time,
+      u.user_id "user.user_id",
+      u.user_name "user.user_name",
+      u.password "user.password"
+    from goods g
+    inner join user u on g.user_id = u.user_id
+    where g.goods_id = #{goodsId}
+  </select>
+  
+   <select id="queryGoodsByUserId" resultType="Goods" parameterType="int">
+    select
+      goods_id,
+      user_id,
+      buyer_id,
+      goods_name,
+      goods_price,
+      img_address,
+      goods_status,
+      goods_desc,
+      create_time
+    from goods
+    where user_id = #{userId}
+  </select>
+  
+  <update id="updateGoodsUser">
+    update
+      goods
+    set
+      goods_status = 1,
+      buyer_id = #{userId}
+    where
+      goods_id = #{goodsId}
+  </update>
+  
+   <update id="confirmTransaction">
+    update
+      goods
+    set
+      goods_status = 0,
+      buyer_id = 0,
+      user_id = #{buyerId}
+    where
+      goods_id = #{goodsId} and user_id = #{userId}
+  </update>
+  
+   <update id="cancelTransaction">
+    update
+      goods
+    set
+      goods_status = 0,
+      buyer_id = 0
+    where
+      goods_id = #{goodsId}
+  </update>
+  
+  
+  <insert id="insertGoods">
+     insert into goods(user_id,goods_name,goods_price,goods_desc,img_address)
+    values (#{userId},#{goodsName},#{goodsPrice},#{goodsDesc},#{imgAddress})
+  </insert>
+  
+  <delete id="deleteGoods">
+     delete from goods where goods_id = #{goodsId}
+  
+  </delete>
+  <!-- 第二种方法
+  <select id="queryAllGoods" resultMap="goodsUserMap">
+    
+    select
+      goods.*,
+      user.user_name,
+      user.user_password
+    from
+      goods,user
+    where goods.user_id = user.user_id
+  </select>
+   <resultMap type="com.secondHandTradingNetwork.entity.Goods" id="goodsUserMap">  
+    <id property="userId" column="user_id"/>  
+    <result property="userId" column="user_id"/>
+    <result property="goodsId" column="goods_id"/>
+    <result property="goodsName" column="goods_name"/>
+    <result property="goodsPrice" column="goods_price"/>
+    <result property="goodsDesc" column="goods_desc"/>
+    <result property="createTime" column="create_time"/>        
+    <association property="user" javaType="com.secondHandTradingNetwork.entity.User">  
+        <id property="userId" column="user_id"/>  
+        <result property="username" column="user_name"/>  
+        <result property="password" column="user_password"/>  
+    </association>  
+</resultMap>
+ -->
+  
+  
+  
+  
+</mapper>
+  

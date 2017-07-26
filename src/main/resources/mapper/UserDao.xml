@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.secondHandTradingNetwork.dao.UserDao">
+  <select id="login" resultType="User" parameterType="String">
+    select user_id,user_name,password
+    from user
+    where user_name=#{username} and password=#{password}
+  </select>
+  
+   <select id="getUserById" resultType="User" parameterType="int">
+    select user_id,user_name,password
+    from user
+    where user_id=#{userId}
+  </select>
+</mapper>
